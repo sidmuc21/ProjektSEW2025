@@ -1,5 +1,6 @@
 package com.example.projekt2025;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 
 public class PongGame extends Application {
     private boolean wPressed = false, sPressed = false, upPressed = false, downPressed = false;
+    private double ballDX = 3, ballDY = 3;
 
     @Override
     public void start(Stage stage) {
@@ -31,7 +33,6 @@ public class PongGame extends Application {
 
         root.getChildren().addAll(paddle1, paddle2, ball);
 
-        // Input events
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.W) wPressed = true;
             if (e.getCode() == KeyCode.S) sPressed = true;
@@ -46,14 +47,29 @@ public class PongGame extends Application {
             if (e.getCode() == KeyCode.DOWN) downPressed = false;
         });
 
-        // Movement logic
-        new javafx.animation.AnimationTimer() {
+        new AnimationTimer() {
             @Override
             public void handle(long now) {
+                // Paddle movement
                 if (wPressed && paddle1.getY() > 0) paddle1.setY(paddle1.getY() - 5);
                 if (sPressed && paddle1.getY() < scene.getHeight() - paddle1.getHeight()) paddle1.setY(paddle1.getY() + 5);
                 if (upPressed && paddle2.getY() > 0) paddle2.setY(paddle2.getY() - 5);
                 if (downPressed && paddle2.getY() < scene.getHeight() - paddle2.getHeight()) paddle2.setY(paddle2.getY() + 5);
+
+                // Ball movement
+                ball.setCenterX(ball.getCenterX() + ballDX);
+                ball.setCenterY(ball.getCenterY() + ballDY);
+
+                // Bounce on walls
+                if (ball.getCenterY() <= 0 || ball.getCenterY() >= scene.getHeight()) {
+                    ballDY *= -1;
+                }
+
+                // Bounce on paddles
+                if (ball.getBoundsInParent().intersects(paddle1.getBoundsInParent())
+                        || ball.getBoundsInParent().intersects(paddle2.getBoundsInParent())) {
+                    ballDX *= -1;
+                }
             }
         }.start();
 
@@ -66,5 +82,3 @@ public class PongGame extends Application {
         launch();
     }
 }
-
-
