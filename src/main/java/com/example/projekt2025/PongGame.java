@@ -9,7 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
+/*
+* Pong game - A ball and two players should play with one another
+ */
 public class PongGame extends Application {
     private boolean wPressed = false, sPressed = false, upPressed = false, downPressed = false;
     private double ballDX = 3, ballDY = 3;
@@ -18,28 +20,37 @@ public class PongGame extends Application {
     public void start(Stage stage) {
         Pane root = new Pane();
         Scene scene = new Scene(root, 600, 400);
-
+        /*
+         * Paddle 1
+         */
         Rectangle paddle1 = new Rectangle(10, 100, Color.BLUE);
         paddle1.setX(10);
         paddle1.setY(150);
-
+        /* Paddle 2
+         */
         Rectangle paddle2 = new Rectangle(10, 100, Color.RED);
         paddle2.setX(580);
         paddle2.setY(150);
-
+        /*
+         * Ball
+         */
         Circle ball = new Circle(10, Color.BLACK);
         ball.setCenterX(300);
         ball.setCenterY(200);
 
         root.getChildren().addAll(paddle1, paddle2, ball);
-
+        /*
+         * Movement controls when pressed
+         */
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.W) wPressed = true;
             if (e.getCode() == KeyCode.S) sPressed = true;
             if (e.getCode() == KeyCode.UP) upPressed = true;
             if (e.getCode() == KeyCode.DOWN) downPressed = true;
         });
-
+        /*
+         * Movement controls when released
+         */
         scene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.W) wPressed = false;
             if (e.getCode() == KeyCode.S) sPressed = false;
