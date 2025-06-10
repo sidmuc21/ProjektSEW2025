@@ -50,25 +50,27 @@ public class PongGame extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // Paddle movement
                 if (wPressed && paddle1.getY() > 0) paddle1.setY(paddle1.getY() - 5);
                 if (sPressed && paddle1.getY() < scene.getHeight() - paddle1.getHeight()) paddle1.setY(paddle1.getY() + 5);
                 if (upPressed && paddle2.getY() > 0) paddle2.setY(paddle2.getY() - 5);
                 if (downPressed && paddle2.getY() < scene.getHeight() - paddle2.getHeight()) paddle2.setY(paddle2.getY() + 5);
 
-                // Ball movement
                 ball.setCenterX(ball.getCenterX() + ballDX);
                 ball.setCenterY(ball.getCenterY() + ballDY);
 
-                // Bounce on walls
                 if (ball.getCenterY() <= 0 || ball.getCenterY() >= scene.getHeight()) {
                     ballDY *= -1;
                 }
 
-                // Bounce on paddles
                 if (ball.getBoundsInParent().intersects(paddle1.getBoundsInParent())
                         || ball.getBoundsInParent().intersects(paddle2.getBoundsInParent())) {
                     ballDX *= -1;
+                }
+
+                if (ball.getCenterX() < 0 || ball.getCenterX() > scene.getWidth()) {
+                    ball.setCenterX(300);
+                    ball.setCenterY(200);
+                    ballDX = -ballDX; // Change direction on reset
                 }
             }
         }.start();
